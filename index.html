@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KI-Governance Krisenraum — WuDE Session 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f8;--bg2:#f8fafd;--surf:#ffffff;--card:#ffffff;
+  --brd:#dde4ed;--brd2:#c8d4e0;
+  --txt:#1a2536;--mt:#5a7089;--lt:#94aec4;
+  --red:#c0392b;--rb:#fdf2f2;--rbd:#f5b8b4;
+  --amb:#b45309;--ab:#fffbeb;--abd:#f5d090;
+  --grn:#166534;--gb:#f0fdf4;--gbd:#86e8ac;
+  --blu:#1d4ed8;--bb:#eff6ff;--bbd:#93c5fd;
+  --pur:#6d28d9;--pub:#faf5ff;--pubd:#c4b5fd;
+  --brd-g:#7c3aed;--brd-m:#2563eb;--brd-ms:#16a34a;--brd-mg:#d97706;
+  --sh:0 1px 4px rgba(30,40,60,.08);--sh2:0 4px 20px rgba(30,40,60,.12);
+  --r:8px;
+  --fd:'Space Grotesk',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:var(--fd);font-size:15px;line-height:1.65;overflow-x:hidden}
+
+/* TOPBAR */
+#tnav{position:fixed;top:0;left:0;right:0;z-index:800;height:50px;background:var(--surf);border-bottom:2px solid var(--txt);display:flex;align-items:center;padding:0 18px;gap:0;box-shadow:var(--sh)}
+.tnav-logo{font-family:var(--fm);font-size:.68rem;letter-spacing:.04em;color:var(--red);margin-right:18px;flex-shrink:0;border:1.5px solid var(--red);padding:3px 9px;border-radius:4px;background:var(--rb);font-weight:500}
+.tnav-logo span{color:var(--txt)}
+.tnav-tabs{display:flex;overflow-x:auto;scrollbar-width:none;flex:1;gap:0}
+.tnav-tabs::-webkit-scrollbar{display:none}
+.tt{font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:0 12px;height:50px;display:flex;align-items:center;gap:5px;cursor:pointer;border-bottom:2.5px solid transparent;color:var(--lt);transition:all .18s;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:none}
+.tt:hover{color:var(--mt)}
+.tt.active{color:var(--txt);border-bottom-color:var(--red);font-weight:600}
+.tt.done{color:var(--grn)}
+.tt.done .tnum{background:var(--grn);color:#fff;border-color:var(--grn)}
+.tnum{width:17px;height:17px;border-radius:50%;background:var(--bg);border:1.5px solid var(--brd2);display:inline-flex;align-items:center;justify-content:center;font-size:.5rem;flex-shrink:0;transition:all .18s;color:var(--mt)}
+.tt.active .tnum{background:var(--red);color:#fff;border-color:var(--red)}
+.tnav-case{margin-left:auto;font-family:var(--fm);font-size:.54rem;color:var(--mt);white-space:nowrap;border-left:1px solid var(--brd);padding-left:14px;flex-shrink:0}
+.prog-bar{position:fixed;top:50px;left:0;right:0;height:3px;background:var(--brd);z-index:799}
+.prog-fill{height:100%;background:var(--red);transition:width .4s ease}
+
+/* SCREENS */
+.scr{display:none;padding-top:68px;min-height:100vh}
+.scr.on{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.inner{max-width:980px;margin:0 auto;padding:22px 20px 80px;position:relative;z-index:2}
+
+/* PHASE HEADER */
+.ph{margin-bottom:22px}
+.ph-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;background:var(--rb);border:1px solid var(--rbd);color:var(--red);padding:4px 10px;border-radius:4px;margin-bottom:9px}
+.ph-title{font-family:var(--fd);font-size:clamp(1.5rem,3.8vw,2.3rem);font-weight:700;line-height:1.05;color:var(--txt);margin-bottom:6px}
+.ph-title em{font-style:italic;color:var(--red)}
+.ph-desc{font-size:.86rem;color:var(--mt);max-width:580px;line-height:1.7}
+
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:20px;margin-bottom:14px;box-shadow:var(--sh)}
+.card.red{border-color:var(--rbd);background:var(--rb)}
+.card.amb{border-color:var(--abd);background:var(--ab)}
+.card.grn{border-color:var(--gbd);background:var(--gb)}
+.card.blu{border-color:var(--bbd);background:var(--bb)}
+.card-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--brd)}
+.card-ico{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.card-title{font-family:var(--fd);font-size:1rem;font-weight:600;color:var(--txt);line-height:1.2}
+.card-sub{font-size:.76rem;color:var(--mt);margin-top:3px}
+
+/* INPUTS */
+.inp{width:100%;background:var(--bg2);border:1.5px solid var(--brd);border-radius:6px;padding:10px 13px;font-family:var(--fd);font-size:.84rem;color:var(--txt);transition:border-color .18s;resize:vertical}
+.inp:focus{outline:none;border-color:var(--red);background:var(--surf)}
+.inp::placeholder{color:var(--lt)}
+.lbl{font-family:var(--fm);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);margin-bottom:5px;display:block}
+.frow{margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:620px){.g2{grid-template-columns:1fr}}
+
+/* BUTTONS */
+.btn{font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:9px 20px;border-radius:6px;cursor:pointer;border:1.5px solid;transition:all .15s;display:inline-block;background:none;font-weight:500}
+.btn-r{background:var(--red);color:#fff;border-color:var(--red)}.btn-r:hover{opacity:.88}
+.btn-a{background:var(--amb);color:#fff;border-color:var(--amb)}.btn-a:hover{opacity:.88}
+.btn-g{background:var(--grn);color:#fff;border-color:var(--grn)}.btn-g:hover{opacity:.88}
+.btn-b{background:var(--blu);color:#fff;border-color:var(--blu)}.btn-b:hover{opacity:.88}
+.btn-o{color:var(--txt);border-color:var(--brd2);background:var(--surf)}.btn-o:hover{border-color:var(--txt);box-shadow:var(--sh)}
+.btn-dim{opacity:.3;cursor:not-allowed;pointer-events:none}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:4px;font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px}
+.pill-r{background:var(--rb);border:1px solid var(--rbd);color:var(--red)}
+.pill-a{background:var(--ab);border:1px solid var(--abd);color:var(--amb)}
+.pill-g{background:var(--gb);border:1px solid var(--gbd);color:var(--grn)}
+.pill-b{background:var(--bb);border:1px solid var(--bbd);color:var(--blu)}
+
+/* WARM-UP QUIZ */
+.wq-item{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh);transition:border-color .2s}
+.wq-stmt{font-size:.9rem;color:var(--txt);line-height:1.6;margin-bottom:11px;font-weight:500}
+.wq-opts{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:0}
+.wq-opt{font-family:var(--fm);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;padding:7px 16px;border-radius:6px;cursor:pointer;border:1.5px solid var(--brd2);color:var(--mt);transition:all .15s;background:var(--bg);font-weight:500;user-select:none}
+.wq-opt:hover:not(.off){border-color:var(--txt);color:var(--txt);background:var(--surf);transform:translateY(-1px);box-shadow:var(--sh)}
+.wq-opt.picked{background:var(--bg2);border-color:var(--brd2);color:var(--mt)}
+.wq-opt.correct{background:var(--gb);border-color:var(--grn);color:var(--grn)}
+.wq-opt.wrong{background:var(--rb);border-color:var(--red);color:var(--red)}
+.wq-opt.off{cursor:default}
+.wq-fb{font-size:.8rem;color:var(--mt);line-height:1.65;margin-top:10px;padding:10px 14px;background:var(--bg);border-left:3px solid var(--brd2);border-radius:0 6px 6px 0;display:none}
+.wq-fb.on{display:block}
+.wq-fb.correct-fb{border-left-color:var(--grn);background:var(--gb)}
+.wq-fb.wrong-fb{border-left-color:var(--red);background:var(--rb)}
+.wq-score{background:var(--ab);border:1.5px solid var(--abd);border-radius:var(--r);padding:16px 20px;text-align:center;margin-top:14px;display:none}
+.wq-score.on{display:block}
+
+/* CASES */
+.cc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.cc{background:var(--surf);border:2px solid var(--brd);border-radius:var(--r);padding:18px;cursor:pointer;transition:all .2s;box-shadow:var(--sh)}
+.cc:hover{border-color:var(--red);box-shadow:var(--sh2);transform:translateY(-2px)}
+.cc.sel{border-color:var(--red);background:var(--rb)}
+.cc-letter{font-family:var(--fm);font-size:1.8rem;font-weight:700;color:var(--lt);line-height:1;margin-bottom:7px;transition:color .2s}
+.cc.sel .cc-letter{color:var(--red)}
+.cc-title{font-family:var(--fd);font-size:.88rem;font-weight:600;color:var(--txt);margin-bottom:5px;line-height:1.3}
+.cc-desc{font-size:.73rem;color:var(--mt);line-height:1.5;margin-bottom:8px}
+.cc-flip{font-size:.72rem;color:var(--red);font-style:italic;line-height:1.4;border-top:1px solid var(--brd);padding-top:8px}
+.case-detail{background:var(--rb);border:1.5px solid var(--rbd);border-radius:var(--r);padding:18px 20px;margin-top:14px;display:none;box-shadow:var(--sh)}
+.case-detail.on{display:block}
+
+/* FAILURE MODE MAP */
+.fm-wrap{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.fm-controls{flex:1;min-width:250px}
+.fm-row{background:var(--surf);border:1px solid var(--brd);border-radius:6px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--sh)}
+.fm-name{font-family:var(--fd);font-size:.82rem;font-weight:600;color:var(--txt);margin-bottom:3px}
+.fm-desc-generic{font-size:.7rem;color:var(--lt);line-height:1.4;margin-bottom:4px}
+.fm-desc-dossier{font-size:.71rem;color:var(--red);line-height:1.45;background:var(--rb);border-left:2px solid var(--rbd);padding:5px 8px;border-radius:0 4px 4px 0;margin-bottom:8px;display:none}
+.fm-desc-dossier.on{display:block}
+.fm-sliders{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fms-row{display:flex;align-items:center;gap:7px}
+.fms-lbl{font-family:var(--fm);font-size:.5rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mt);flex:1;min-width:48px}
+.fms-range{flex:2;-webkit-appearance:none;height:5px;border-radius:3px;background:var(--brd);outline:none;cursor:pointer}
+.fms-range::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--red);cursor:pointer;border:2px solid var(--surf);box-shadow:var(--sh)}
+.fms-val{font-family:var(--fm);font-size:.64rem;color:var(--red);width:14px;text-align:right;flex-shrink:0;font-weight:600}
+#fmCanvas{background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);flex-shrink:0;box-shadow:var(--sh)}
+
+/* RED/BLUE */
+.rb-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:620px){.rb-split{grid-template-columns:1fr}}
+.rb-panel{border-radius:var(--r);padding:18px;border:2px solid;box-shadow:var(--sh)}
+.rb-r{border-color:var(--rbd);background:var(--rb)}
+.rb-b{border-color:var(--bbd);background:var(--bb)}
+.rb-hd{font-family:var(--fm);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px;font-weight:600}
+
+/* NIST CONTROL STACK */
+.nist-tabs{display:flex;gap:0;margin-bottom:16px;border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;background:var(--bg)}
+.nist-tab{flex:1;padding:10px 6px;text-align:center;cursor:pointer;font-family:var(--fm);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mt);transition:all .18s;border:none;background:none;font-weight:500}
+.nist-tab:hover{color:var(--txt);background:var(--surf)}
+.nist-tab.a-g{background:var(--surf);color:var(--pur);border-bottom:3px solid var(--pur);font-weight:600}
+.nist-tab.a-m{background:var(--surf);color:var(--blu);border-bottom:3px solid var(--blu);font-weight:600}
+.nist-tab.a-ms{background:var(--surf);color:var(--grn);border-bottom:3px solid var(--grn);font-weight:600}
+.nist-tab.a-mg{background:var(--surf);color:var(--amb);border-bottom:3px solid var(--amb);font-weight:600}
+.nist-panel{display:none}.nist-panel.on{display:block}
+.cs-field{background:var(--bg);border:1.5px solid var(--brd);border-radius:6px;padding:12px;margin-bottom:9px;transition:border-color .18s}
+.cs-field:focus-within{background:var(--surf);border-color:var(--red)}
+.cs-field-hd{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.cs-inp{width:100%;background:transparent;border:none;outline:none;font-family:var(--fd);font-size:.84rem;color:var(--txt);line-height:1.55;resize:vertical;min-height:48px}
+.cs-inp::placeholder{color:var(--lt)}
+
+/* STRESS TEST */
+.st-item{background:var(--surf);border:1px solid var(--brd);border-left:3px solid var(--brd);border-radius:var(--r);padding:14px 16px;margin-bottom:9px;transition:border-left-color .2s;box-shadow:var(--sh)}
+.st-item:focus-within{border-left-color:var(--red)}
+.st-n{font-family:var(--fm);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lt);margin-bottom:4px}
+.st-q{font-family:var(--fd);font-size:.88rem;font-weight:600;color:var(--txt);margin-bottom:4px;line-height:1.4}
+.st-hint{font-size:.74rem;color:var(--mt);margin-bottom:8px;line-height:1.5}
+
+/* ENTSCHEIDUNGSRAUM */
+.cr-header{background:var(--rb);border:1.5px solid var(--rbd);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;box-shadow:var(--sh)}
+.cr-alert{font-family:var(--fm);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:3px;font-weight:600}
+.cr-situation{font-family:var(--fd);font-size:.9rem;font-weight:600;color:var(--txt);line-height:1.5}
+.cr-dec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px;margin-bottom:16px}
+.cr-opt{background:var(--surf);border:2px solid var(--brd);border-radius:var(--r);padding:14px 10px;cursor:pointer;text-align:center;transition:all .15s;box-shadow:var(--sh)}
+.cr-opt:hover:not(.off){border-color:var(--red);background:var(--rb);transform:translateY(-1px);box-shadow:var(--sh2)}
+.cr-opt.sel{border-color:var(--red);background:var(--rb)}
+.cr-opt.off{cursor:default}
+.cr-opt-ico{font-size:1.4rem;margin-bottom:5px}
+.cr-opt-lbl{font-family:var(--fm);font-size:.54rem;letter-spacing:.06em;text-transform:uppercase;color:var(--txt);font-weight:500}
+#crTimer{font-family:var(--fm);font-size:2.8rem;font-weight:700;text-align:center;margin:12px 0;color:var(--amb)}
+#crTimer.low{color:var(--red)}
+#crTimer.done{color:var(--lt)}
+
+/* PRESENTATION */
+#presMode{display:none;position:fixed;inset:0;z-index:2000;background:var(--txt);overflow-y:auto;padding:48px 32px}
+.pres-inner{max-width:860px;margin:0 auto;color:#e8f0f8}
+.pres-close{position:fixed;top:14px;right:18px;background:none;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);font-family:var(--fm);font-size:.56rem;letter-spacing:.1em;padding:7px 12px;border-radius:4px;cursor:pointer;text-transform:uppercase}
+.pres-badge{font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.12);padding:4px 10px;border-radius:4px;margin-bottom:14px;display:inline-block}
+.pres-title{font-family:var(--fd);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1;margin-bottom:20px}
+.pres-title strong{color:#f0a500}
+.pres-sh{font-family:var(--fm);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,220,240,.4);margin-bottom:10px}
+.pres-section{margin-bottom:26px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.pres-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:620px){.pres-grid{grid-template-columns:1fr}}
+.pres-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:14px}
+.pres-box-hd{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.pres-text{font-size:.84rem;color:rgba(200,220,240,.75);line-height:1.65;white-space:pre-wrap}
+.pres-dec{background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);border-radius:6px;padding:14px 18px}
+
+/* WELCOME HERO */
+.hero{background:linear-gradient(135deg,var(--txt) 0%,#1a2d4a 100%);border-radius:var(--r);padding:32px 36px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:var(--sh2)}
+.hero::after{content:'VORFALL AKTIV';position:absolute;top:18px;right:20px;font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--red);border:1px solid rgba(192,57,43,.5);background:rgba(192,57,43,.12);padding:3px 9px;border-radius:3px}
+.hero-title{font-family:var(--fd);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:.95;margin-bottom:7px;color:#fff}
+.hero-title em{font-style:italic;color:#f0a500}
+.hero-sub{font-size:.87rem;color:rgba(255,255,255,.6);max-width:540px;line-height:1.7;margin-bottom:18px}
+.hero-meta{font-family:var(--fm);font-size:.52rem;color:rgba(255,255,255,.3);letter-spacing:.1em}
+.concept-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;margin-bottom:18px}
+.cs-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:14px;border-top:3px solid;box-shadow:var(--sh)}
+.ws-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px}
+.ws-item{background:var(--surf);border:1px solid var(--brd);border-radius:6px;padding:11px 13px;display:flex;gap:9px;align-items:flex-start;box-shadow:var(--sh)}
+.ws-num{width:22px;height:22px;border-radius:50%;background:var(--txt);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.52rem;flex-shrink:0;margin-top:1px}
+.ws-title{font-family:var(--fd);font-size:.82rem;font-weight:600;color:var(--txt)}
+.ws-sub{font-size:.68rem;color:var(--mt);margin-top:2px}
+
+/* SAVE INDICATOR */
+#saveInd{position:fixed;bottom:14px;right:14px;background:var(--grn);color:#fff;font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;padding:5px 11px;border-radius:4px;opacity:0;transition:opacity .3s;z-index:900}
+
+/* LITERATUR */
+.lit-clust{font-family:var(--fm);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin:24px 0 10px;padding-bottom:7px;border-bottom:2px solid var(--rbd)}
+.lit-entry{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:16px 18px;margin-bottom:9px;border-left:3px solid var(--brd);box-shadow:var(--sh)}
+.lit-entry.core{border-left-color:var(--red)}
+.lit-entry.nist{border-left-color:var(--blu)}
+.lit-entry.cdr{border-left-color:var(--pur)}
+.lit-apa{font-size:.82rem;color:var(--txt);line-height:1.6;margin-bottom:5px}
+.lit-apa em{font-style:italic}
+.lit-doi{font-family:var(--fm);font-size:.58rem;color:var(--blu);margin-top:4px}
+.lit-doi a{color:var(--blu)}
+.lit-note{font-size:.74rem;color:var(--mt);line-height:1.6;font-style:italic;border-top:1px solid var(--brd);padding-top:6px;margin-top:6px}
+</style>
+</head>
+<body>
+<div id="tnav">
+  <span class="tnav-logo">KI-<span>KRISENRAUM</span></span>
+  <div class="tnav-tabs">
+    <button class="tt active" data-tab="0" onclick="gotoTab(0)"><span class="tnum">◎</span> Start</button>
+    <button class="tt" data-tab="1" onclick="gotoTab(1)"><span class="tnum">1</span> Dossier<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~10'</span></button>
+    <button class="tt" data-tab="2" onclick="gotoTab(2)"><span class="tnum">2</span> Systemforensik<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~20'</span></button>
+    <button class="tt" data-tab="3" onclick="gotoTab(3)"><span class="tnum">3</span> Versagensmuster<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~15'</span></button>
+    <button class="tt" data-tab="4" onclick="gotoTab(4)"><span class="tnum">4</span> Angriff/Verteidigung<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~20'</span></button>
+    <button class="tt" data-tab="5" onclick="gotoTab(5)"><span class="tnum">5</span> Steuerungsmodell<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~25'</span></button>
+    <button class="tt" data-tab="6" onclick="gotoTab(6)"><span class="tnum">6</span> Belastungstest<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~10'</span></button>
+    <button class="tt" data-tab="7" onclick="gotoTab(7)"><span class="tnum">7</span> Entscheidungsraum<span style="font-size:.43rem;color:var(--lt);margin-left:3px">~15'</span></button>
+    <button class="tt" data-tab="8" onclick="gotoTab(8)"><span class="tnum">◈</span> Briefing</button>
+    <button class="tt" data-tab="9" onclick="gotoTab(9)"><span class="tnum">☰</span> Literatur</button>
+  </div>
+  <span class="tnav-case" id="tnavCase">Kein Dossier gewählt</span>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+<div id="saveInd">✓ Gespeichert</div>
+
+<!-- ══ TAB 0: START ══ -->
+<div class="scr on" id="tab0"><div class="inner">
+  <div class="hero">
+    <div class="hero-title">KI-Governance<br><em>Krisenraum</em></div>
+    <div class="hero-sub">Von CDR/ESG zur Steuerung von KI-Systemen und Agenten. Kein Fallseminar — ein Incident-Response-Übung. Ihr wählt ein Vorfallsdossier, analysiert forensisch, greift an, verteidigt und entscheidet unter Druck.</div>
+    <div class="hero-meta">Wirtschafts- und digitale Ethik · Session 5 · Prof. Thomas Petzold Ph.D.</div>
+  </div>
+
+  <div class="card amb">
+    <div class="card-hd"><div class="card-ico" style="background:var(--ab)">⚡</div><div><div class="card-title">Warm-up: Was bisher geschah</div><div class="card-sub">6 Aussagen aus den vergangenen Sitzungen — Stimmt / Stimmt nicht / Kommt darauf an. Klickt direkt — ihr bekommt sofortiges Feedback.</div></div></div>
+    <div id="wqItems"></div>
+    <div class="wq-score" id="wqScore"></div>
+  </div>
+
+  <div style="font-family:var(--fm);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);margin-bottom:10px">◈ Denkgerüst: NIST AI RMF 1.0</div>
+  <div class="concept-strip">
+    <div class="cs-card" style="border-top-color:var(--pur)"><div style="font-family:var(--fm);font-size:.96rem;font-weight:600;color:var(--pur);margin-bottom:3px">Steuern</div><div style="font-size:.7rem;color:var(--mt);margin-bottom:4px">Rollen & Leitlinien</div><div style="font-size:.72rem;color:var(--lt)">Wer ist verantwortlich? Welche Regeln gelten?</div></div>
+    <div class="cs-card" style="border-top-color:var(--blu)"><div style="font-family:var(--fm);font-size:.96rem;font-weight:600;color:var(--blu);margin-bottom:3px">Kartieren</div><div style="font-size:.7rem;color:var(--mt);margin-bottom:4px">Kontext & Akteure</div><div style="font-size:.72rem;color:var(--lt)">Was soll das System? Wer ist betroffen?</div></div>
+    <div class="cs-card" style="border-top-color:var(--grn)"><div style="font-family:var(--fm);font-size:.96rem;font-weight:600;color:var(--grn);margin-bottom:3px">Messen</div><div style="font-size:.7rem;color:var(--mt);margin-bottom:4px">Tests & Metriken</div><div style="font-size:.72rem;color:var(--lt)">Wie wird Verhalten beobachtet und gemessen?</div></div>
+    <div class="cs-card" style="border-top-color:var(--amb)"><div style="font-family:var(--fm);font-size:.96rem;font-weight:600;color:var(--amb);margin-bottom:3px">Steuern</div><div style="font-size:.7rem;color:var(--mt);margin-bottom:4px">Intervention & Vorfälle</div><div style="font-size:.72rem;color:var(--lt)">Was tun bei Problemen? Wann stoppen?</div></div>
+  </div>
+  <div style="font-family:var(--fm);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mt);margin-bottom:10px">◈ Ablauf dieser Sitzung</div>
+  <div class="ws-strip">
+    <div class="ws-item"><div class="ws-num">1</div><div><div class="ws-title">📂 Vorfallsdossier</div><div class="ws-sub">KI-System auswählen</div></div></div>
+    <div class="ws-item"><div class="ws-num">2</div><div><div class="ws-title">🔬 Systemforensik</div><div class="ws-sub">7 Fragen rekonstruieren</div></div></div>
+    <div class="ws-item"><div class="ws-num">3</div><div><div class="ws-title">⚠ Versagensmuster</div><div class="ws-sub">Risikomatrix aufbauen</div></div></div>
+    <div class="ws-item"><div class="ws-num">4</div><div><div class="ws-title">⚔ Angriff/Verteidigung</div><div class="ws-sub">System testen</div></div></div>
+    <div class="ws-item"><div class="ws-num">5</div><div><div class="ws-title">🏗 Steuerungsmodell</div><div class="ws-sub">NIST-Governance aufbauen</div></div></div>
+    <div class="ws-item"><div class="ws-num">6</div><div><div class="ws-title">⚡ Belastungstest</div><div class="ws-sub">Eigenes Modell angreifen</div></div></div>
+    <div class="ws-item"><div class="ws-num">7</div><div><div class="ws-title">🚨 Entscheidungsraum</div><div class="ws-sub">Entscheidung unter Druck</div></div></div>
+  </div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(1)">Vorfallsdossier wählen →</button></div>
+</div></div>
+
+<!-- ══ TAB 1: VORFALLSDOSSIER ══ -->
+<div class="scr" id="tab1"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 1 — Vorfallsdossier</div><div class="ph-title">Wählt euer <em>Vorfallsdossier</em></div><div class="ph-desc">Vier KI-Systeme aus Medien, Events, Marketing und Commerce — alle aus der realen Welt abgeleitet. Wählt das, das zuerst am vernünftigsten klingt. Prüft dann, wo es kippt.</div></div>
+  <div class="cc-grid" id="caseGrid"></div>
+  <div id="caseDetail" class="case-detail"></div>
+  <div class="btn-row" id="caseNextRow" style="display:none"><button class="btn btn-r" onclick="gotoTab(2)">Weiter: Systemforensik →</button></div>
+</div></div>
+
+<!-- ══ TAB 2: SYSTEMFORENSIK ══ -->
+<div class="scr" id="tab2"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 2 — Systemforensik</div><div class="ph-title">Was wird <em>wirklich</em> optimiert?</div><div class="ph-desc">Keine spontanen Urteile — systematische Rekonstruktion. Beantwortet alle 7 Fragen, bevor ihr bewertet. Die Lösung darf jetzt noch nicht kommen.</div></div>
+  <div id="forensikCase" style="margin-bottom:14px"></div>
+  <div class="card">
+    <div class="card-hd"><div class="card-ico" style="background:var(--bb)">🔬</div><div><div class="card-title">Systemforensik — 7 Rekonstruktionsfragen</div><div class="card-sub">Präzise und ohne vorschnelle Wertung</div></div></div>
+    <div class="frow"><label class="lbl">01 — Was ist das eigentliche Ziel des Systems?</label><div style="font-size:.74rem;color:var(--mt);margin-bottom:5px;font-style:italic">Offizielles Ziel und tatsächliche Optimierungslogik — können diese auseinanderfallen?</div><textarea class="inp" id="fo1" rows="3" placeholder="Offiziell soll das System … — tatsächlich optimiert es …" oninput="autoSave()"></textarea></div>
+    <div class="frow"><label class="lbl">02 — Welche Kennzahl oder welcher Stellvertreter steuert das Verhalten?</label><div style="font-size:.74rem;color:var(--mt);margin-bottom:5px;font-style:italic">Was zählt das System — und was zählt es nicht, obwohl es wichtig wäre?</div><textarea class="inp" id="fo2" rows="3" placeholder="Die zentrale Steuerungsgröße ist … Was dabei nicht gemessen wird: …" oninput="autoSave()"></textarea></div>
+    <div class="frow"><label class="lbl">03 — Welche Daten sind entscheidend?</label><div style="font-size:.74rem;color:var(--mt);margin-bottom:5px;font-style:italic">Woher kommen die Daten? Welche Annahmen stecken darin?</div><textarea class="inp" id="fo3" rows="3" placeholder="Das System nutzt … — die Datenquelle setzt voraus, dass …" oninput="autoSave()"></textarea></div>
+    <div class="g2">
+      <div class="frow"><label class="lbl">04 — Wer profitiert unmittelbar?</label><textarea class="inp" id="fo4" rows="3" placeholder="Unmittelbare Begünstigte …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">05 — Wer trägt systematische Nachteile?</label><textarea class="inp" id="fo5" rows="3" placeholder="Strukturell benachteiligte Gruppen …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">06 — Sofortwirkungen vs. Spätfolgen</label><textarea class="inp" id="fo6" rows="3" placeholder="Sofort sichtbar: … / Erst später merkbar: …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">07 — Was fehlt für eine saubere Beurteilung?</label><textarea class="inp" id="fo7" rows="3" placeholder="Wir bräuchten noch …" oninput="autoSave()"></textarea></div>
+    </div>
+    <div style="background:var(--rb);border:1.5px solid var(--rbd);border-radius:6px;padding:12px 15px;margin-top:6px">
+      <label class="lbl" style="color:var(--red)">Schlussformel — „Das System tut eigentlich …"</label>
+      <textarea class="inp" id="fo_conclusion" rows="2" placeholder="Das System tut eigentlich …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(3)">Weiter: Versagensmuster-Karte →</button><button class="btn btn-o" onclick="gotoTab(1)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 3: VERSAGENSMUSTER ══ -->
+<div class="scr" id="tab3"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 3 — Versagensmuster-Karte</div><div class="ph-title">Wo kann das System <em>systematisch scheitern?</em></div><div class="ph-desc">Bewertet jeden Versagensmuster-Typ für euer Dossier auf zwei Dimensionen. Die orangefarbenen Boxen zeigen, wie jedes Muster konkret in eurem Fall auftreten könnte.</div></div>
+  <div class="card">
+    <div class="card-hd"><div class="card-ico" style="background:var(--rb)">⚠</div><div><div class="card-title">Risikomatrix — Versagensmuster</div><div class="card-sub">Schadenspotenzial × Eintrittswahrscheinlichkeit · 1 = niedrig, 5 = hoch · Die dossierspezifischen Hinweise erscheinen in Rot</div></div></div>
+    <div class="fm-wrap">
+      <div class="fm-controls" id="fmControls"></div>
+      <div style="flex-shrink:0">
+        <canvas id="fmCanvas" width="290" height="290"></canvas>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:.5rem;color:var(--mt)"><div style="width:9px;height:9px;border-radius:50%;background:var(--red)"></div>Kritisch</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:.5rem;color:var(--mt)"><div style="width:9px;height:9px;border-radius:50%;background:var(--amb)"></div>Erhöht</div>
+          <div style="display:flex;align-items:center;gap:5px;font-family:var(--fm);font-size:.5rem;color:var(--mt)"><div style="width:9px;height:9px;border-radius:50%;background:var(--grn)"></div>Moderat</div>
+        </div>
+      </div>
+    </div>
+    <div class="frow" style="margin-top:14px"><label class="lbl">Kritischstes Versagensmuster — Begründung für euer Dossier</label><textarea class="inp" id="fm_critical" rows="3" placeholder="Das gefährlichste Muster ist … weil in diesem System …" oninput="autoSave()"></textarea></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-ico" style="background:var(--bb)">🚨</div><div><div class="card-title">Vorfallsdenken</div><div class="card-sub">Nicht nur abstrakt — sondern als konkreten Vorfall denken</div></div></div>
+    <div class="g2">
+      <div class="frow"><label class="lbl">Was wäre ein meldewürdiger Vorfall?</label><textarea class="inp" id="it1" rows="3" placeholder="Ein konkreter Vorfall wäre …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">Wie würde man ihn bemerken?</label><textarea class="inp" id="it2" rows="3" placeholder="Erkennbar durch …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">Was müsste dokumentiert sein?</label><textarea class="inp" id="it3" rows="3" placeholder="Für die Nachverfolgung brauchen wir …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">Erste externe Frage bei einem Vorfall?</label><textarea class="inp" id="it4" rows="3" placeholder="Eine Journalistin würde als erstes fragen: …" oninput="autoSave()"></textarea></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(4)">Weiter: Angriff / Verteidigung →</button><button class="btn btn-o" onclick="gotoTab(2)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 4: ANGRIFF / VERTEIDIGUNG ══ -->
+<div class="scr" id="tab4"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 4 — Angriff / Verteidigung</div><div class="ph-title">Das System <em>testen</em></div><div class="ph-desc">Teilt die Gruppe. Das Angriffsteam sucht Schwachstellen. Das Verteidigungsteam patcht. Ziel: kein perfektes Modell — sondern eines, das nach Kritik besser wird.</div></div>
+  <div class="rb-split">
+    <div class="rb-panel rb-r">
+      <div class="rb-hd" style="color:var(--red)">🔴 Angriffsteam</div>
+      <div class="frow"><label class="lbl" style="color:var(--red)">Wo lässt sich das System missbrauchen?</label><textarea class="inp" id="rb_r1" rows="3" placeholder="Missbrauchspfad …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--red)">Wo irrt es systematisch?</label><textarea class="inp" id="rb_r2" rows="3" placeholder="Systematischer Irrtum …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--red)">Wo wäre der öffentliche Schaden am größten?</label><textarea class="inp" id="rb_r3" rows="3" placeholder="Größter Schadensbereich …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--red)">Welche Entwurfsannahme ist am fragilsten?</label><textarea class="inp" id="rb_r4" rows="3" placeholder="Fragilste Annahme …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea></div>
+    </div>
+    <div class="rb-panel rb-b">
+      <div class="rb-hd" style="color:var(--blu)">🔵 Verteidigungsteam</div>
+      <div class="frow"><label class="lbl" style="color:var(--blu)">Welche Grenze wird eingeführt?</label><textarea class="inp" id="rb_b1" rows="3" placeholder="Neue Grenze / rote Linie …" oninput="autoSave()" style="border-color:var(--bbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--blu)">Welche Kontrollinstanz kommt hinzu?</label><textarea class="inp" id="rb_b2" rows="3" placeholder="Neue Kontrollinstanz …" oninput="autoSave()" style="border-color:var(--bbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--blu)">Welche Daten oder Protokolle fehlen?</label><textarea class="inp" id="rb_b3" rows="3" placeholder="Fehlende Aufzeichnungen …" oninput="autoSave()" style="border-color:var(--bbd)"></textarea></div>
+      <div class="frow"><label class="lbl" style="color:var(--blu)">Wo braucht es menschliche Eingriffsmöglichkeit?</label><textarea class="inp" id="rb_b4" rows="3" placeholder="Eingriffspunkt …" oninput="autoSave()" style="border-color:var(--bbd)"></textarea></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="card-hd"><div class="card-ico" style="background:var(--ab)">🤝</div><div><div class="card-title">Synthese nach dem Duell</div><div class="card-sub">Was ändert sich am Governance-Ansatz nach Angriff und Verteidigung?</div></div></div><textarea class="inp" id="rb_synthesis" rows="4" placeholder="Nach dem Test ändern wir folgendes …" oninput="autoSave()"></textarea></div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(5)">Weiter: Steuerungsmodell →</button><button class="btn btn-o" onclick="gotoTab(3)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 5: STEUERUNGSMODELL ══ -->
+<div class="scr" id="tab5"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 5 — Steuerungsmodell</div><div class="ph-title">Governance nach <em>NIST AI RMF</em></div><div class="ph-desc">Baut euer Steuerungsmodell entlang der vier NIST-Funktionen. Governance ist keine Haltung — sondern überprüfbare Managementpraxis.</div></div>
+  <div class="card">
+    <div class="nist-tabs" id="nistTabs">
+      <button class="nist-tab" id="ntg" onclick="setNIST('g')">🏛 Steuern</button>
+      <button class="nist-tab" id="ntm" onclick="setNIST('m')">🗺 Kartieren</button>
+      <button class="nist-tab" id="ntms" onclick="setNIST('ms')">📏 Messen</button>
+      <button class="nist-tab" id="ntmg" onclick="setNIST('mg')">⚙ Verwalten</button>
+    </div>
+    <div class="nist-panel" id="np_g">
+      <div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pur);margin-bottom:10px;font-weight:600">Rollen, Leitlinien, Verantwortlichkeit — Wer entscheidet? Wer prüft?</div>
+      <div class="cs-field" style="border-color:var(--pubd)"><div class="cs-field-hd" style="color:var(--pur)">Leitlinie / Richtlinie</div><textarea class="cs-inp" id="cs_policy" rows="2" placeholder="Welche Leitlinie gilt für dieses KI-System?" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--pubd)"><div class="cs-field-hd" style="color:var(--pur)">Verantwortliche Rolle</div><textarea class="cs-inp" id="cs_role" rows="2" placeholder="Wer trägt die Hauptverantwortung für das Systemverhalten?" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--pubd)"><div class="cs-field-hd" style="color:var(--pur)">Rote Linien (mind. 2)</div><textarea class="cs-inp" id="cs_redlines" rows="3" placeholder="1. Rote Linie: …&#10;2. Rote Linie: …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--pubd)"><div class="cs-field-hd" style="color:var(--pur)">Abschaltbedingung</div><textarea class="cs-inp" id="cs_stop" rows="2" placeholder="Das System wird gestoppt, wenn …" oninput="autoSave()"></textarea></div>
+    </div>
+    <div class="nist-panel" id="np_m">
+      <div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blu);margin-bottom:10px;font-weight:600">Kontext, Ziel, Akteure, Einsatzumgebung</div>
+      <div class="cs-field" style="border-color:var(--bbd)"><div class="cs-field-hd" style="color:var(--blu)">Systembeschreibung (Systemkarte)</div><textarea class="cs-inp" id="cs_desc" rows="3" placeholder="Das System … wird eingesetzt für … durch …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--bbd)"><div class="cs-field-hd" style="color:var(--blu)">Betroffene Gruppen</div><textarea class="cs-inp" id="cs_stakeholders" rows="2" placeholder="Direkt betroffen: … / Indirekt betroffen: …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--bbd)"><div class="cs-field-hd" style="color:var(--blu)">Bekannte Grenzen</div><textarea class="cs-inp" id="cs_limits" rows="2" placeholder="Das System ist nicht geeignet für … und gilt nicht in …" oninput="autoSave()"></textarea></div>
+    </div>
+    <div class="nist-panel" id="np_ms">
+      <div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin-bottom:10px;font-weight:600">Tests, Kennzahlen, Beobachtung, Belege</div>
+      <div class="cs-field" style="border-color:var(--gbd)"><div class="cs-field-hd" style="color:var(--grn)">Kennzahl 1 (KPI)</div><textarea class="cs-inp" id="cs_kpi1" rows="2" placeholder="Messbar, nicht manipulierbar …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--gbd)"><div class="cs-field-hd" style="color:var(--grn)">Kennzahl 2 (KPI)</div><textarea class="cs-inp" id="cs_kpi2" rows="2" placeholder="Messbar, nicht manipulierbar …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--gbd)"><div class="cs-field-hd" style="color:var(--grn)">Beobachtungsmechanismus</div><textarea class="cs-inp" id="cs_monitor" rows="2" placeholder="Wie wird das Systemverhalten kontinuierlich beobachtet?" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--gbd)"><div class="cs-field-hd" style="color:var(--grn)">Prüfartefakt</div><textarea class="cs-inp" id="cs_audit" rows="2" placeholder="Systemkarte / Prüfbericht / Freigabeprotokoll / Vorfallsmemo …" oninput="autoSave()"></textarea></div>
+    </div>
+    <div class="nist-panel" id="np_mg">
+      <div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amb);margin-bottom:10px;font-weight:600">Eingriff, Korrektur, Vorfallsbehandlung</div>
+      <div class="cs-field" style="border-color:var(--abd)"><div class="cs-field-hd" style="color:var(--amb)">Menschlicher Eingriffspunkt</div><textarea class="cs-inp" id="cs_human" rows="2" placeholder="Ein Mensch übernimmt, wenn …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--abd)"><div class="cs-field-hd" style="color:var(--amb)">Eskalationsweg</div><textarea class="cs-inp" id="cs_esc" rows="2" placeholder="Bei Vorfall: Schritt 1 → … / Schritt 2 → …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--abd)"><div class="cs-field-hd" style="color:var(--amb)">Erster Vorfallsreaktionsschritt</div><textarea class="cs-inp" id="cs_ir" rows="2" placeholder="Im Vorfallsfall ist die erste Maßnahme …" oninput="autoSave()"></textarea></div>
+      <div class="cs-field" style="border-color:var(--abd)"><div class="cs-field-hd" style="color:var(--amb)">Protokollierungspflicht</div><textarea class="cs-inp" id="cs_log" rows="2" placeholder="Folgendes muss aufgezeichnet und nachvollziehbar sein …" oninput="autoSave()"></textarea></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(6)">Weiter: Belastungstest →</button><button class="btn btn-o" onclick="gotoTab(4)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 6: BELASTUNGSTEST ══ -->
+<div class="scr" id="tab6"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 6 — Belastungstest</div><div class="ph-title">Wie scheitert euer <em>eigenes Modell?</em></div><div class="ph-desc">Sechs Angriffspunkte. Gute Governance erkennt nicht nur Risiken — sondern den eigenen blinden Fleck. Ehrlich, nicht defensiv.</div></div>
+  <div class="card red">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-size:1.5rem">⚡</span><div><div style="font-family:var(--fd);font-size:1rem;font-weight:600">Sechs Angriffspunkte</div><div style="font-size:.76rem;color:var(--mt)">Je schärfer ihr euer Modell angreift, desto stabiler wird es im Briefing</div></div></div>
+    <div class="st-item"><div class="st-n">Belastung 01</div><div class="st-q">Welche Kennzahl könnte leicht 'optimiert' werden ohne das eigentliche Ziel zu erfüllen?</div><div class="st-hint">Welche Messgröße ist zählbar, aber manipulierbar durch Anreizeffekte?</div><textarea class="inp" id="st1" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+    <div class="st-item"><div class="st-n">Belastung 02</div><div class="st-q">Wo würde euer Modell zu spät eingreifen?</div><div class="st-hint">Welcher Schaden ist bereits entstanden, bevor eure Kontrollen greifen?</div><textarea class="inp" id="st2" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+    <div class="st-item"><div class="st-n">Belastung 03</div><div class="st-q">Welcher Schaden wäre für Betroffene zuerst spürbar?</div><div class="st-hint">Nicht aus Governance-Sicht — sondern aus Sicht derer, die das System direkt betrifft.</div><textarea class="inp" id="st3" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+    <div class="st-item"><div class="st-n">Belastung 04</div><div class="st-q">Was wäre nach einem Vorfall nicht mehr nachvollziehbar?</div><div class="st-hint">Welche Information fehlt für eine saubere Rekonstruktion?</div><textarea class="inp" id="st4" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+    <div class="st-item"><div class="st-n">Belastung 05</div><div class="st-q">Wo könnte die Unternehmensleitung Warnsignale übersehen wollen?</div><div class="st-hint">Wo gibt es Anreize, Probleme kleinzureden oder zu verzögern?</div><textarea class="inp" id="st5" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+    <div class="st-item"><div class="st-n">Belastung 06</div><div class="st-q">Welcher externe Schaden taucht in eurer Governance überhaupt nicht auf?</div><div class="st-hint">Wessen Nachteile bleiben unsichtbar, weil sie nie in euren Kennzahlen erscheinen?</div><textarea class="inp" id="st6" rows="2" placeholder="…" oninput="autoSave()"></textarea></div>
+  </div>
+  <div class="card"><div class="card-hd"><div class="card-ico" style="background:var(--gb)">🛡</div><div><div class="card-title">Überarbeitetes Modell</div><div class="card-sub">Was ändert sich nach dem Belastungstest?</div></div></div><textarea class="inp" id="st_improve" rows="4" placeholder="Nach dem Belastungstest verbessern wir …" oninput="autoSave()"></textarea></div>
+  <div class="btn-row"><button class="btn btn-r" onclick="gotoTab(7)">Weiter: Entscheidungsraum →</button><button class="btn btn-o" onclick="gotoTab(5)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 7: ENTSCHEIDUNGSRAUM ══ -->
+<div class="scr" id="tab7"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ Schritt 7 — Entscheidungsraum</div><div class="ph-title"><em>Entscheidung</em> unter Druck</div><div class="ph-desc">Ihr seid die Vorfallsgruppe. 5 Minuten. Entscheidung explizit begründet auf Versagensmuster, Governance-Lücke und Vorfallslogik.</div></div>
+  <div class="cr-header">
+    <span style="font-size:1.8rem;flex-shrink:0">🚨</span>
+    <div><div class="cr-alert">Vorfall aktiv</div><div class="cr-situation" id="crSituation">Wählt zuerst ein Vorfallsdossier in Schritt 1</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-ico" style="background:var(--rb)">⏱</div><div><div class="card-title">5-Minuten-Uhr</div><div class="card-sub">Entscheidung unter Zeitdruck</div></div></div>
+    <div id="crTimer">05:00</div>
+    <div style="display:flex;gap:8px;justify-content:center"><button class="btn btn-r" onclick="startTimer()">Uhr starten</button><button class="btn btn-o" onclick="resetTimer()">Zurücksetzen</button></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="card-ico" style="background:var(--rb)">🎯</div><div><div class="card-title">Entscheidung</div><div class="card-sub">Wählt eine Primärentscheidung — explizit begründet</div></div></div>
+    <div class="cr-dec-grid" id="crDecGrid"></div>
+    <div class="frow"><label class="lbl" style="color:var(--red)">Begründung — explizit auf Versagensmuster, Governance-Lücke und Vorfallslogik bezogen</label><textarea class="inp" id="cr_reasoning" rows="5" placeholder="Wir entscheiden … weil das kritischste Versagensmuster … ist. Die Governance-Lücke liegt bei … Der Eskalationsweg lautet …" oninput="autoSave()" style="border-color:var(--rbd)"></textarea></div>
+    <div class="g2">
+      <div class="frow"><label class="lbl">Welche Information brauchen wir als nächstes?</label><textarea class="inp" id="cr_next" rows="3" placeholder="Als nächstes benötigen wir …" oninput="autoSave()"></textarea></div>
+      <div class="frow"><label class="lbl">An wen wird intern eskaliert?</label><textarea class="inp" id="cr_escalate" rows="3" placeholder="Eskalation an … mit folgenden Informationen …" oninput="autoSave()"></textarea></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-g" onclick="openPresentation()">📡 Briefing-Modus starten</button><button class="btn btn-o" onclick="gotoTab(6)">← Zurück</button></div>
+</div></div>
+
+<!-- ══ TAB 8: BRIEFING ══ -->
+<div class="scr" id="tab8"><div class="inner">
+  <div class="ph"><div class="ph-badge">◈ 2-Minuten Krisenraum-Briefing</div><div class="ph-title">Kurz, scharf, <em>verteidigbar</em></div><div class="ph-desc">2 Minuten pro Team. Die anderen Teams stellen genau eine Rückfrage: „Welche Annahme eurer Entscheidung ist am fragilsten?"</div></div>
+  <div class="card amb">
+    <div style="font-family:var(--fm);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amb);margin-bottom:12px;font-weight:600">Briefing-Struktur</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px">
+      <div style="background:var(--surf);border-radius:6px;padding:11px 13px;border:1px solid var(--brd);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.5rem;color:var(--amb);margin-bottom:4px;font-weight:600">01</div><div style="font-size:.82rem;font-weight:600">Was ist passiert?</div></div>
+      <div style="background:var(--surf);border-radius:6px;padding:11px 13px;border:1px solid var(--brd);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.5rem;color:var(--amb);margin-bottom:4px;font-weight:600">02</div><div style="font-size:.82rem;font-weight:600">Kritischstes Versagensmuster?</div></div>
+      <div style="background:var(--surf);border-radius:6px;padding:11px 13px;border:1px solid var(--brd);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.5rem;color:var(--amb);margin-bottom:4px;font-weight:600">03</div><div style="font-size:.82rem;font-weight:600">Welche Kontrolle greift / fehlt?</div></div>
+      <div style="background:var(--surf);border-radius:6px;padding:11px 13px;border:1px solid var(--brd);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.5rem;color:var(--amb);margin-bottom:4px;font-weight:600">04</div><div style="font-size:.82rem;font-weight:600">Was entscheidet ihr jetzt?</div></div>
+      <div style="background:var(--surf);border-radius:6px;padding:11px 13px;border:1px solid var(--brd);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.5rem;color:var(--amb);margin-bottom:4px;font-weight:600">05</div><div style="font-size:.82rem;font-weight:600">Was braucht ihr als nächstes?</div></div>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn btn-r" onclick="openPresentation()">Vollbild-Präsentation →</button></div>
+</div></div>
+
+<!-- ══ TAB 9: LITERATUR ══ -->
+<div class="scr" id="tab9"><div class="inner">
+  <div class="ph"><div class="ph-badge">◎ Literatur</div><div class="ph-title">Quellen &amp; <em>Referenzen</em></div><div class="ph-desc">Wissenschaftliche Grundlagen zu KI-Governance, algorithmischer Rechenschaftspflicht und KI-Sicherheit — APA 7.</div></div>
+  <div class="lit-clust">01 · KI-Governance & Rechenschaftspflicht</div>
+  <div class="lit-entry core"><div class="lit-apa">Mittelstadt, B. D., Allo, P., Taddeo, M., Wachter, S., &amp; Floridi, L. (2016). The ethics of algorithms: Mapping the debate. <em>Big Data &amp; Society, 3</em>(2).</div><div class="lit-doi"><a href="https://doi.org/10.1177/2053951716679679" target="_blank" rel="noopener">→ DOI 10.1177/2053951716679679</a></div><div class="lit-note">Kartierung ethischer Debatten zu algorithmischen Systemen. Grundlagentext für das Versagensmuster-Denken in dieser Sitzung.</div></div>
+  <div class="lit-entry core"><div class="lit-apa">Raji, I. D., Smart, A., White, R. N., Mitchell, M., Gebru, T., Hutchinson, B., Smith-Loud, J., Theron, D., &amp; Barnes, P. (2020). Closing the AI accountability gap: Defining an end-to-end framework for internal algorithmic auditing. In <em>Proceedings of the 2020 Conference on Fairness, Accountability, and Transparency</em> (pp. 33–44). ACM.</div><div class="lit-doi"><a href="https://doi.org/10.1145/3351095.3372873" target="_blank" rel="noopener">→ DOI 10.1145/3351095.3372873</a></div><div class="lit-note">End-to-End-Framework für interne algorithmische Prüfungen. Grundlage für das NIST-basierte Steuerungsmodell.</div></div>
+  <div class="lit-entry core"><div class="lit-apa">Mitchell, M., Wu, S., Zaldivar, A., Barnes, P., Vasserman, L., Hutchinson, B., Spitzer, E., Raji, I. D., &amp; Gebru, T. (2019). Model cards for model reporting. In <em>Proceedings of the Conference on Fairness, Accountability, and Transparency</em> (pp. 220–229). ACM.</div><div class="lit-doi"><a href="https://doi.org/10.1145/3287560.3287596" target="_blank" rel="noopener">→ DOI 10.1145/3287560.3287596</a></div><div class="lit-note">Systemkarten als Dokumentationsformat für KI-Modelle. Praxisreferenz für das Prüfartefakt im Steuerungsmodell.</div></div>
+  <div class="lit-entry core"><div class="lit-apa">Rahwan, I. (2018). Society-in-the-loop: Programming the algorithmic social contract. <em>Ethics and Information Technology, 20</em>(1), 5–14.</div><div class="lit-doi"><a href="https://doi.org/10.1007/s10676-017-9430-8" target="_blank" rel="noopener">→ DOI 10.1007/s10676-017-9430-8</a></div><div class="lit-note">Verantwortung in soziotechnischen Systemen: Wie algorithmische Systeme gesellschaftliche Verträge einschreiben.</div></div>
+  <div class="lit-clust">02 · NIST KI-Risikomanagement-Rahmen</div>
+  <div class="lit-entry nist"><div class="lit-apa">National Institute of Standards and Technology. (2023). <em>Artificial intelligence risk management framework (AI RMF 1.0)</em>. NIST AI 100-1. U.S. Department of Commerce.</div><div class="lit-doi"><a href="https://doi.org/10.6028/NIST.AI.100-1" target="_blank" rel="noopener">→ DOI 10.6028/NIST.AI.100-1</a></div><div class="lit-note">Steuern/Kartieren/Messen/Verwalten als Governance-Framework. Strukturgrundlage für das Steuerungsmodell.</div></div>
+  <div class="lit-entry nist"><div class="lit-apa">OECD. (2024). <em>Defining AI incidents and related terms</em>. OECD Publishing.</div><div class="lit-note">Gemeinsame Definitionen für KI-Vorfälle: Basis für systematisches Vorfallsdenken und -reporting.</div></div>
+  <div class="lit-clust">03 · KI-Sicherheit & Systemverhalten</div>
+  <div class="lit-entry"><div class="lit-apa">Amodei, D., Olah, C., Steinhardt, J., Christiano, P., Schulman, J., &amp; Mané, D. (2016). Concrete problems in AI safety. <em>arXiv:1606.06565</em>.</div><div class="lit-doi"><a href="https://arxiv.org/abs/1606.06565" target="_blank" rel="noopener">→ arXiv:1606.06565</a></div><div class="lit-note">Konkrete Sicherheitsprobleme: Belohnungs-Hacking, Ziel-Fehlspezifikation, Stellvertreter-Versagen. Hintergrund für die Versagensmuster.</div></div>
+  <div class="lit-clust">04 · Corporate Digital Responsibility (Rückbindung Session 4)</div>
+  <div class="lit-entry cdr"><div class="lit-apa">Lobschat, L., Mueller, B., Eggers, F., Brandimarte, L., Diefenbach, S., Kroschke, M., &amp; Wirtz, J. (2021). Corporate digital responsibility. <em>Journal of Business Research, 122</em>, 875–888.</div><div class="lit-doi"><a href="https://doi.org/10.1016/j.jbusres.2019.10.006" target="_blank" rel="noopener">→ DOI 10.1016/j.jbusres.2019.10.006</a></div><div class="lit-note">CDR als Managementgrundlage — KI-Governance verschärft die Steuerungsfrage auf das Systemverhalten selbst.</div></div>
+  <div style="text-align:center;margin-top:28px;padding:14px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh)"><div style="font-family:var(--fm);font-size:.54rem;color:var(--lt);letter-spacing:.1em">Designed by Prof. Thomas Petzold Ph.D. and Claude · Wirtschafts- und digitale Ethik · 2026</div></div>
+</div></div>
+
+<!-- PRÄSENTATIONSMODUS -->
+<div id="presMode">
+  <button class="pres-close" onclick="closePresentation()">✕ Schließen</button>
+  <div class="pres-inner" id="presContent"></div>
+</div>
+
+<script>
+// ════════════════════════════════
+// VORFALLSDOSSIERS
+// ════════════════════════════════
+const CASES=[
+  {id:'A',title:'Automatisiertes Werbebudget-Management',
+   short:'Ein KI-System verteilt Werbebudgets, stoppt Creatives und verschiebt Zielgruppen in Echtzeit.',
+   desc:'Eine mittelgroße Eventagentur mit 80 Festangestellten nutzt seit 18 Monaten ein KI-gestütztes Programmatic-Advertising-System für alle digitalen Kampagnen. Das System übernimmt vollautomatisch: Budgetverteilung auf Kanäle, Pausierung schwacher Creatives, Echtzeit-Zielgruppenanpassung. Der Head of Marketing sieht nur das wöchentliche ROAS-Dashboard. Das System optimiert auf Klickrate und Conversion-Wahrscheinlichkeit — mit deutlichen Ergebnissen. Aber Mediaplanung und externe Analysen zeigen: Nutzer:innen über 50, Menschen mit seltenen Suchbegriffen und Nutzer:innen aus ländlichen Regionen verschwinden systematisch aus der Ausspielung. Weder die Agentur noch das System merken es aktiv — es optimiert schlicht weg.',
+   flip:'Das System tut genau, wofür es optimiert wurde. Die Frage: Was hat man vergessen zu spezifizieren?',
+   tags:['Digitales Marketing','Stellvertreter-Versagen','Fairness','Zielgruppendiskriminierung'],
+   situation:'Nach einer internen Prüfung zeigt die Analyse: Nutzende über 55 Jahre werden in Kampagnen für barrierefreie Festival-Packages trotz erkennbarer Kaufabsicht systematisch nicht ausgespielt. Ein Antidiskriminierungsverband hat nach einem ähnlichen Fall in der Reisebranche Beschwerde bei der Bundesnetzagentur eingereicht. Euer Programmatic-System könnte unter dieselbe Prüflogik fallen.',
+   fm:{
+     fm1:'Das erklärte Ziel ist Kampagnen-Performance — aber Performance wird über ROAS gemessen, nicht über Reichweite bei relevanten Zielgruppen.',
+     fm2:'ROAS als Kennzahl schließt systematisch Gruppen mit niedrigerer Konversionsrate aus der Ausspielung aus — auch wenn sie kaufen würden.',
+     fm3:'Historische Kampagnendaten spiegeln vergangene Zielgruppenentscheidungen wider — und verstärken sie als Lernmuster.',
+     fm4:'Das System lernt, welche Gruppen konvertieren — und spielt künftig noch stärker dort aus, wodurch andere Gruppen noch seltener erreicht werden.',
+     fm5:'Mediaagenturen und Publisher können Platzierungen so gestalten, dass sie im System besser performen, ohne die eigentliche Kampagnenleistung zu verbessern.',
+     fm6:'Ohne demografische Merkmale als Input kann das System Gruppen dennoch indirekt ausschließen — über Proxy-Merkmale wie Gerät, Standort oder Browsing-Gewohnheiten.',
+     fm7:'Das ROAS-Dashboard klingt präzise und datenbasiert — was kritische Prüfung durch Mediaplaner:innen ersetzt statt ergänzt.',
+     fm8:'Sobald das Budget verteilt ist, gibt es keinen automatischen Stopp-Mechanismus, der bei unfairer Ausspielung eingreift.',
+   }},
+  {id:'B',title:'KI-gestützter Bewerberfilter im Eventbereich',
+   short:'Ein Algorithmus priorisiert Freelancer:innen für Eventjobs auf Basis historischer Erfolgsdaten.',
+   desc:'Ein Personaleinsatzunternehmen im Live-Eventbereich (Auf- und Abbau, Technik, Sicherheit, Hospitality) mit jährlich über 4.000 Freelance-Einsätzen nutzt seit zwei Jahren ein KI-gestütztes Bewerbungsmanagementsystem. Das Tool erstellt automatisch eine Shortlist der Top-25 Bewerber:innen für jede Ausschreibung. Grundlage: historische Einsatzdaten (Pünktlichkeit, Kundenbewertungen, Wiederholungsbuchungen, Einsatzhäufigkeit). HR sieht nur die Shortlist — die Ranking-Logik ist nicht dokumentiert. Die Besetzungsqualität ist nach internem Maßstab gestiegen. Aber: Bewerber:innen mit Lücken im Einsatzprofil (Krankheit, Pflege, Elternzeit), mit nicht-deutschen Namen und ohne Netzwerk zu früher gut bewerteten Stammkräften landen auffällig selten in den Top 25.',
+   flip:'Historische Erfolgsdaten reproduzieren historische Ausschlüsse. Wer fehlte früher schon?',
+   tags:['HR-Tech','Diskriminierung','Algorithmic Management','Arbeit'],
+   situation:'Ein freier Techniker mit sieben Jahren Erfahrung im Veranstaltungsbereich wurde nach einem sechsmonatigen Ausfall wegen einer Herzoperation 14 Mal hintereinander nicht auf die Shortlist gesetzt. Er vermutet systematische Benachteiligung und hat sich an eine Beratungsstelle für Diskriminierung am Arbeitsmarkt gewandt. Parallel zeigt eine erste Eigenauswertung des Unternehmens, dass Bewerber:innen über 45 und solche mit nicht-europäischen Nachnamen in Shortlists strukturell unterrepräsentiert sind.',
+   flip:'Historische Qualitätsdaten messen, wer früher bevorzugt wurde — nicht, wer die Arbeit gut macht.',
+   fm:{
+     fm1:'Das System soll "die besten Bewerber:innen" finden — aber "best" ist definiert als "historisch häufig gebucht" statt als "geeignet für die Stelle".',
+     fm2:'"Kundenbewertungen" als Kennzahl: Bewerter:innen bevorzugen Bekannte. Das System verstärkt soziales Kapital als Eignungsmerkmal.',
+     fm3:'Wer in den letzten zwei Jahren weniger Einsätze hatte (Krankheit, Pflege, Elternzeit), hat weniger Datenpunkte — und landet automatisch weiter hinten.',
+     fm4:'Häufig gebuchte Personen bekommen mehr Sichtbarkeit → werden häufiger gebucht → steigen weiter → der Effekt verstärkt sich.',
+     fm5:'Stammkräfte mit guten Scores werden bevorzugt eingesetzt — andere haben kaum Möglichkeit, Scores aufzubauen, ohne eingesetzt zu werden.',
+     fm6:'Das System nutzt keine geschützten Merkmale — schließt aber über Proxy-Merkmale wie Einsatzhäufigkeit, Netzwerkzugehörigkeit und Bewertungsmuster aus.',
+     fm7:'Die Shortlist wirkt wie ein objektives Ranking — HR prüft Einzelfälle kaum noch, weil das System "schon gut war".',
+     fm8:'Wer nicht auf der Shortlist steht, erfährt keinen Grund und hat keine Möglichkeit zur Korrektur. Es gibt keine Widerspruchsoption.',
+   }},
+  {id:'C',title:'Synthetische Kampagnen-Lokalisierung',
+   short:'Eine Marke lokalisiert Kampagnen mit KI-generierten Stimmen und Gesichtern — ohne Kennzeichnung.',
+   desc:'Eine internationale Kreativagentur bietet Marken seit 14 Monaten einen KI-gestützten Lokalisierungsservice an: Videokampagnen werden mit synthetisch generierten Stimmen (für 22 Sprachen), Lippensynchronisation und in Einzelfällen KI-generierten Gesichtern adaptiert. Für einen Sportartikelhersteller wurden auf diese Weise 340 Markensprecher-Videos in 19 Länder ausgeliefert — mit einer jeweils "lokalen" Stimme und Optik. Die Kosten sanken um 73% gegenüber realer Lokalisierung mit lokalen Sprecher:innen. Nirgendwo auf den Kampagnenmaterialien ist vermerkt, dass Stimmen und Gesichter KI-generiert sind. Lokale Kreativschaffende wurden nicht einbezogen.',
+   flip:'Was als Effizienzgewinn gilt, ist aus Sicht der Dargestellten und des Publikums eine nicht gekennzeichnete Täuschung.',
+   tags:['Deepfake','Einwilligung','Creator Rights','Täuschung'],
+   situation:'Ein aufmerksamer Content-Creator in Südkorea erkennt, dass die "lokale" Markenstimme in der Kampagne KI-generiert ist. Er postet einen Thread auf X mit technischer Analyse. Innerhalb von 36 Stunden berichten drei koreanische Medien darüber. Die Marke antwortet nicht. Ein Verband für Synchronsprecher:innen in Deutschland kündigt an, rechtliche Mittel zu prüfen. Die Agentur fragt euch: Was jetzt?',
+   fm:{
+     fm1:'Das Ziel ist Kostenreduktion bei internationaler Reichweite — aber Vertrauen, Authentizität und Einwilligung wurden nie als Zieldimension definiert.',
+     fm2:'"Keine Beschwerden" als impliziter Erfolgsmaßstab: Solange niemand fragt, gilt es als funktionierend. Das Ausbleiben von Kritik ist kein Qualitätsnachweis.',
+     fm3:'Trainingsdaten für Stimmen und Gesichter können ohne explizite Einwilligung der Original-Sprecher:innen erzeugt worden sein.',
+     fm4:'Wenn keine Beschwerden kommen, wird das Modell weiter skaliert — bis der erste große Fall entsteht, der alle bisherigen Einsätze in Frage stellt.',
+     fm5:'Kund:innen und Agenturen optimieren auf Kosteneinsparung und Time-to-Market, nicht auf Transparenz. Das System belohnt Nicht-Disclosure.',
+     fm6:'Publikum unterscheidet nicht zwischen "echter" und "synthetischer" lokaler Stimme — das erzeugt Vertrauen auf falscher Grundlage.',
+     fm7:'Souveräner, professioneller Sound der KI-Stimmen verhindert kritische Prüfung durch Marke und Mediaplaner:innen.',
+     fm8:'Es gibt keine automatische Kennzeichnungspflicht im System. Disclosure ist optional und wird nie ausgelöst.',
+   }},
+  {id:'D',title:'Echtzeit-Besucherstrom-Steuerung',
+   short:'Ein System steuert Besucherströme bei Großveranstaltungen — mit Risikoeinschätzungen für Einzelpersonen.',
+   desc:'Ein Sicherheitsdienstleister bietet Großveranstaltern seit zwei Jahren ein KI-gestütztes Crowd-Management-System an. Auf Basis von Mobilfunksignalen, Kameradaten und Ticketscanning erstellt das System in Echtzeit Heatmaps der Besucherströme und schlägt Leitsystem-Anpassungen vor. Bei einem Musikfestival mit 45.000 Besuchenden wurde die Funktion "Risikoeinschätzung" aktiviert: Das System vergibt für Personengruppen Risiko-Scores und markiert bestimmte Bereiche als erhöhtes Konfliktpotenzial. Sicherheitspersonal kann per App auf diese Scores zugreifen und Personen "vormerken". Bewegungsprofile werden 90 Tage gespeichert.',
+   flip:'Was als Sicherheitsgewinn kommuniziert wird, erzeugt neue Fragen zu Überwachung, Bias und Eingriffstiefe.',
+   tags:['Überwachung','Sicherheit','Datenschutz','Autonomie'],
+   situation:'Nach einem Datenleck bei einem Partnerdienstleister werden die 90-tägigen Bewegungsprofile von 12.000 Festivalbesuchenden unverschlüsselt auf einem Server gefunden. Die Landesbeauftragte für Datenschutz eröffnet ein Prüfverfahren. Parallel berichtet eine Journalistin, dass das Risiko-Scoring-Modell Personen aus bestimmten PLZ-Gebieten systematisch höher einstuft. Der Veranstalter hat keine eigene Governance für das Drittanbieter-System.',
+   flip:'Sicherheit und Kontrolle sind kaum noch zu unterscheiden. Wer definiert, was ein "Risiko" ist?',
+   fm:{
+     fm1:'Das erklärte Ziel ist Sicherheit — aber "Sicherheit" ist nicht operationalisiert: Geht es um Stauverhinderung, Konfliktvermeidung, oder Verhaltensprädiktion?',
+     fm2:'"Risiko-Score" als Kennzahl: Was genau wird gemessen? Auf welcher Grundlage? Das Scoring-Modell ist nicht dokumentiert.',
+     fm3:'Bewegungs- und Kameradaten aus vergangenen Events können strukturelle Bias einschreiben — wenn bestimmte Gruppen früher häufiger als auffällig markiert wurden.',
+     fm4:'Je mehr Personen aus bestimmten Bereichen als Risiko markiert werden, desto mehr Sicherheitspersonal ist dort präsent — was mehr Vorfälle erzeugt und das Scoring bestätigt.',
+     fm5:'Sicherheitspersonal richtet sein Verhalten nach dem Score — auch wenn dieser fehlerhaft ist. Das System ersetzt Urteilsvermögen.',
+     fm6:'Das Scoring basiert auf Standort und Bewegungsmuster — beides kann mit demografischen Merkmalen korrelieren, ohne sie explizit zu nutzen.',
+     fm7:'Die App-Darstellung wirkt offiziell und präzise — Sicherheitspersonal zweifelt selten an Systemhinweisen.',
+     fm8:'Es gibt keinen Mechanismus, durch den Betroffene ihren Score einsehen, korrigieren oder widersprechen können.',
+   }},
+];
+
+// ════════════════════════════════
+// VERSAGENSMUSTER
+// ════════════════════════════════
+const FAILURE_MODES=[
+  {id:'fm1',name:'Ziel-Fehlspezifikation',desc:'Das Ziel ist zu eng, unvollständig oder falsch definiert.'},
+  {id:'fm2',name:'Stellvertreter-Versagen',desc:'Die Kennzahl misst nicht, was eigentlich gemeint ist.'},
+  {id:'fm3',name:'Datenverzerrung',desc:'Trainingsdaten reproduzieren historische Ungleichheiten.'},
+  {id:'fm4',name:'Rückkopplungsschleife',desc:'Das System verstärkt seine eigenen Outputs durch Rückkopplung.'},
+  {id:'fm5',name:'Anreiz-Gaming',desc:'Akteure optimieren für den Score, nicht für das eigentliche Ziel.'},
+  {id:'fm6',name:'Verdeckte Benachteiligung',desc:'Ungleichbehandlung ohne explizit diskriminierende Merkmale.'},
+  {id:'fm7',name:'Übervertrauen',desc:'Souveräner Output unterdrückt menschliche kritische Prüfung.'},
+  {id:'fm8',name:'Fehlende Abschaltlogik',desc:'Kein Mechanismus, das System zu stoppen oder einzuschränken.'},
+];
+
+// ════════════════════════════════
+// WARM-UP QUIZ
+// ════════════════════════════════
+const WQ=[
+  {stmt:'Eine Plattform, die 4,8 Sterne aus 340 Bewertungen zeigt, ist per se vertrauenswürdig — weil Reputationssysteme Fehlinformationen verhindern.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> In Session 3 (Vertrauensarchitektur) haben wir gesehen, dass Reputationssysteme manipulierbar sind: gekaufte Bewertungen, Netzwerkeffekte und Review-Inflation können institutionelles Vertrauen simulieren, ohne die dahinterliegende Vertrauenswürdigkeit zu belegen. (Krügel et al., 2024)'},
+  {stmt:'Wenn ein E-Commerce-Shop denselben Checkout-Flow wie eine etablierte Plattform verwendet, signalisiert das, dass er denselben Sicherheitsstandards entspricht.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> In Session 3 haben wir "Simuliertes Vertrauen durch Interface-Transfer" analysiert: Design kopiert Vertrauenssignale, ohne die dahinterliegende Infrastruktur zu kopieren. Das ist einer der häufigsten Mechanismen bei Online-Betrug. (Riegelsberger et al., 2005)'},
+  {stmt:'Ein Unternehmen, das keine Beschwerden über seine Datenpraktiken erhält, hat keine wesentlichen Probleme mit doppelter Wesentlichkeit.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> Impact Materiality (Session 4: Doppelte Wesentlichkeit) fragt, wie das Unternehmen auf andere wirkt — unabhängig davon, ob Betroffene sich beschweren. Viele Wirkungen entstehen, ohne dass Betroffene die Ursache kennen oder Einspruchsmöglichkeiten haben.'},
+  {stmt:'In Märkten mit starken Netzwerkeffekten setzt sich langfristig das qualitativ beste Produkt durch.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> In der Netzwerkökonomie (Session 1) haben wir gesehen, dass starke Netzwerkeffekte zu Winner-takes-all-Dynamiken und Lock-in führen können — unabhängig von der Produktqualität. Das VHS-vs.-Betamax-Beispiel ist ein klassischer Fall.'},
+  {stmt:'Eine CDR-Strategie ist erst dann institutionalisiert, wenn sie öffentlich kommuniziert wird.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> In Session 4 (Folie 18) haben wir erarbeitet: Institutionalisierung bedeutet, dass Verantwortung in Rollen, Regeln, Prozessen und Kontrollen verankert ist — nicht in Kommunikation. Öffentliche Kommunikation ohne interne Governance ist das Gegenteil von Institutionalisierung.'},
+  {stmt:'Wenn ein KI-System problematische Ergebnisse liefert, liegt das meistens an einem Fehler im Code.',
+   c:'stimmt_nicht',
+   fb:'<strong>Stimmt nicht.</strong> In den meisten dokumentierten Fällen tut das System genau, wofür es optimiert wurde. Das Problem liegt in der Zieldefinition, den Stellvertreter-Kennzahlen und den fehlenden Nebenbedingungen — nicht im Code. (Amodei et al., 2016: "Concrete Problems in AI Safety")'},
+];
+
+// ════════════════════════════════
+// ENTSCHEIDUNGSOPTIONEN
+// ════════════════════════════════
+const CR_DECISIONS=[
+  {ico:'▶',lbl:'Weiterlaufen lassen',id:'d_run'},
+  {ico:'◈',lbl:'Begrenzen',id:'d_limit'},
+  {ico:'⏸',lbl:'Pausieren',id:'d_pause'},
+  {ico:'⏹',lbl:'Abschalten',id:'d_stop'},
+  {ico:'📢',lbl:'Öffentlich kommunizieren',id:'d_public'},
+  {ico:'⬆',lbl:'Intern eskalieren',id:'d_esc'},
+  {ico:'🔍',lbl:'Externe Prüfung',id:'d_audit'},
+];
+
+// ════════════════════════════════
+// STATE & PERSISTENCE
+// ════════════════════════════════
+const SAVE_KEY='ai_krisenraum_s5';
+let G={selectedCase:null,wqAnswers:{},fmVals:{},crDecision:null};
+let currentTab=0,timerInterval=null,timerSecs=300;
+
+function autoSave(){
+  clearTimeout(window._sv);
+  window._sv=setTimeout(()=>{
+    try{
+      const d={...G,currentTab};
+      ['fo1','fo2','fo3','fo4','fo5','fo6','fo7','fo_conclusion','fm_critical','it1','it2','it3','it4',
+       'rb_r1','rb_r2','rb_r3','rb_r4','rb_b1','rb_b2','rb_b3','rb_b4','rb_synthesis',
+       'cs_policy','cs_role','cs_redlines','cs_stop','cs_desc','cs_stakeholders','cs_limits',
+       'cs_kpi1','cs_kpi2','cs_monitor','cs_audit','cs_human','cs_esc','cs_ir','cs_log',
+       'st1','st2','st3','st4','st5','st6','st_improve','cr_reasoning','cr_next','cr_escalate']
+       .forEach(id=>{const el=document.getElementById(id);if(el)d[id]=el.value;});
+      localStorage.setItem(SAVE_KEY,JSON.stringify(d));
+      const si=document.getElementById('saveInd');si.style.opacity=1;setTimeout(()=>si.style.opacity=0,1200);
+    }catch(e){}
+  },700);
+}
+
+function loadSaved(){
+  try{
+    const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
+    if(!d)return;
+    Object.assign(G,d);
+    if(G.selectedCase){renderCases();showCaseDetail(G.selectedCase);showCaseNav();}
+    ['fo1','fo2','fo3','fo4','fo5','fo6','fo7','fo_conclusion','fm_critical','it1','it2','it3','it4',
+     'rb_r1','rb_r2','rb_r3','rb_r4','rb_b1','rb_b2','rb_b3','rb_b4','rb_synthesis',
+     'cs_policy','cs_role','cs_redlines','cs_stop','cs_desc','cs_stakeholders','cs_limits',
+     'cs_kpi1','cs_kpi2','cs_monitor','cs_audit','cs_human','cs_esc','cs_ir','cs_log',
+     'st1','st2','st3','st4','st5','st6','st_improve','cr_reasoning','cr_next','cr_escalate']
+     .forEach(id=>{const el=document.getElementById(id);if(el&&d[id])el.value=d[id];});
+    if(G.fmVals)FAILURE_MODES.forEach(fm=>{
+      const ss=document.getElementById('sl_s_'+fm.id),sp=document.getElementById('sl_p_'+fm.id);
+      if(ss&&G.fmVals[fm.id+'_s']){ss.value=G.fmVals[fm.id+'_s'];updateFMVal(fm.id);}
+      if(sp&&G.fmVals[fm.id+'_p']){sp.value=G.fmVals[fm.id+'_p'];updateFMVal(fm.id);}
+    });
+    if(G.crDecision)document.querySelectorAll('.cr-opt').forEach(el=>el.classList.toggle('sel',el.dataset.id===G.crDecision));
+    if(G.wqAnswers)Object.entries(G.wqAnswers).forEach(([i,ans])=>applyWQAnswer(parseInt(i),ans));
+    if(d.currentTab>0)setTimeout(()=>gotoTab(d.currentTab),150);
+  }catch(e){}
+}
+
+// ════════════════════════════════
+// NAV
+// ════════════════════════════════
+function gotoTab(n){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('tab'+n).classList.add('on');
+  document.querySelectorAll('.tt').forEach(t=>{const tn=parseInt(t.dataset.tab);t.classList.toggle('active',tn===n);t.classList.toggle('done',tn<n&&tn>0);});
+  currentTab=n;
+  document.getElementById('progFill').style.width=([0,11,22,33,44,55,66,77,88,100][n]||0)+'%';
+  window.scrollTo(0,0);
+  if(n===3)setTimeout(()=>{initFMControls();drawFM();},100);
+  autoSave();
+}
+
+// ════════════════════════════════
+// WARM-UP QUIZ
+// ════════════════════════════════
+function initWQ(){
+  document.getElementById('wqItems').innerHTML=WQ.map((q,i)=>`
+    <div class="wq-item" id="wqi${i}">
+      <div class="wq-stmt">${i+1}. ${q.stmt}</div>
+      <div class="wq-opts">
+        <div class="wq-opt" id="wqo${i}_s" onclick="pickWQ(${i},'stimmt')">✓ Stimmt</div>
+        <div class="wq-opt" id="wqo${i}_n" onclick="pickWQ(${i},'stimmt_nicht')">✗ Stimmt nicht</div>
+        <div class="wq-opt" id="wqo${i}_k" onclick="pickWQ(${i},'kommt_an')">~ Kommt darauf an</div>
+      </div>
+      <div class="wq-fb" id="wqfb${i}"></div>
+    </div>`).join('');
+}
+
+function pickWQ(i,ans){
+  if(G.wqAnswers[i]!==undefined)return;
+  G.wqAnswers[i]=ans;
+  applyWQAnswer(i,ans);
+  // Check if all answered
+  if(Object.keys(G.wqAnswers).length===WQ.length){
+    const correct=WQ.filter((q,j)=>G.wqAnswers[j]===q.c).length;
+    const box=document.getElementById('wqScore');
+    box.classList.add('on');
+    box.innerHTML=`<div style="font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);margin-bottom:6px;font-weight:600">Auswertung</div>
+      <div style="font-family:var(--fd);font-size:1.6rem;font-weight:700;color:${correct>=4?'var(--grn)':correct>=2?'var(--amb)':'var(--red)'}">${correct} / ${WQ.length}</div>
+      <div style="font-size:.8rem;color:var(--mt);margin-top:5px">${correct>=5?'Ausgezeichnet — voller Überblick über die ersten vier Sessions.':correct>=3?'Gut — die Kernthesen sitzen. Lest die Erklärungen durch.':'Lest die Erklärungen sorgfältig — sie zeigen die Argumentationslogik der Session.'}</div>`;
+  }
+  autoSave();
+}
+
+function applyWQAnswer(i,ans){
+  const q=WQ[i];const correct=ans===q.c;
+  const mapKey={stimmt:'_s',stimmt_nicht:'_n',kommt_an:'_k'};
+  // Style all option buttons
+  ['_s','_n','_k'].forEach(suf=>{
+    const el=document.getElementById('wqo'+i+suf);if(!el)return;
+    el.classList.add('off');
+    const thisAns=suf==='_s'?'stimmt':suf==='_n'?'stimmt_nicht':'kommt_an';
+    if(thisAns===q.c)el.classList.add('correct');
+    else if(thisAns===ans)el.classList.add('wrong');
+    else el.classList.add('picked');
+  });
+  // Show feedback
+  const fb=document.getElementById('wqfb'+i);if(!fb)return;
+  fb.classList.add('on',correct?'correct-fb':'wrong-fb');
+  fb.innerHTML=q.fb;
+  document.getElementById('wqi'+i).style.borderColor=correct?'var(--gbd)':'var(--rbd)';
+}
+
+// ════════════════════════════════
+// VORFALLSDOSSIERS
+// ════════════════════════════════
+function renderCases(){
+  document.getElementById('caseGrid').innerHTML=CASES.map(c=>`
+    <div class="cc${G.selectedCase===c.id?' sel':''}" id="cc${c.id}" onclick="selectCase('${c.id}')">
+      <div class="cc-letter">${c.id}</div>
+      <div class="cc-title">${c.title}</div>
+      <div class="cc-desc">${c.short}</div>
+      <div class="cc-flip">↻ ${c.flip||'Wo kippt es?'}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${c.tags.map(t=>`<span style="background:var(--rb);border:1px solid var(--rbd);border-radius:3px;padding:2px 6px;font-family:var(--fm);font-size:.48rem;color:var(--red)">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function selectCase(id){
+  G.selectedCase=id;renderCases();
+  showCaseDetail(id);showCaseNav();
+  // Update forensik case badge
+  const c=CASES.find(x=>x.id===id);
+  document.getElementById('tnavCase').textContent='Dossier '+id+': '+c.title;
+  document.getElementById('crSituation').textContent=c.situation;
+  const fc=document.getElementById('forensikCase');
+  if(fc)fc.innerHTML=`<div style="background:var(--rb);border:1.5px solid var(--rbd);border-radius:6px;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="font-family:var(--fm);font-size:1.2rem;font-weight:700;color:var(--red)">${c.id}</span><span style="font-family:var(--fd);font-size:.88rem;font-weight:600">${c.title}</span>${c.tags.map(t=>`<span style="background:var(--rb);border:1px solid var(--rbd);border-radius:3px;padding:2px 6px;font-family:var(--fm);font-size:.46rem;color:var(--red)">${t}</span>`).join('')}</div>`;
+  // Update FM controls with dossier context if already rendered
+  if(document.getElementById('fmControls').innerHTML)initFMControls();
+  autoSave();
+}
+
+function showCaseDetail(id){
+  const c=CASES.find(x=>x.id===id);const d=document.getElementById('caseDetail');
+  d.classList.add('on');
+  d.innerHTML=`<div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:8px;font-weight:600">◈ Vorfallsdossier ${c.id}</div>
+    <div style="font-family:var(--fd);font-size:.95rem;font-weight:600;margin-bottom:8px">${c.title}</div>
+    <div style="font-size:.84rem;color:var(--mt);line-height:1.7;margin-bottom:12px">${c.desc}</div>
+    <div style="background:var(--surf);border:1px solid var(--brd);border-radius:6px;padding:12px 15px;margin-bottom:10px">
+      <div style="font-family:var(--fm);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:5px;font-weight:600">⚡ Simulierter Vorfall</div>
+      <div style="font-size:.84rem;color:var(--txt);line-height:1.68">${c.situation}</div>
+    </div>
+    <div style="font-size:.78rem;color:var(--red);font-style:italic;padding:8px 12px;background:var(--rb);border-radius:6px;border-left:3px solid var(--rbd)">↻ ${c.flip}</div>`;
+}
+
+function showCaseNav(){document.getElementById('caseNextRow').style.display='flex';}
+
+// ════════════════════════════════
+// VERSAGENSMUSTER-KARTE
+// ════════════════════════════════
+function initFMControls(){
+  const c=G.selectedCase?CASES.find(x=>x.id===G.selectedCase):null;
+  document.getElementById('fmControls').innerHTML=FAILURE_MODES.map(fm=>`
+    <div class="fm-row">
+      <div class="fm-name">${fm.name}</div>
+      <div class="fm-desc-generic">${fm.desc}</div>
+      ${c&&c.fm[fm.id]?`<div class="fm-desc-dossier on">→ In Dossier ${c.id}: ${c.fm[fm.id]}</div>`:'<div class="fm-desc-dossier">→ Kein Dossier gewählt</div>'}
+      <div class="fm-sliders">
+        <div class="fms-row"><span class="fms-lbl">Schaden</span><input type="range" class="fms-range" id="sl_s_${fm.id}" min="1" max="5" value="${G.fmVals[fm.id+'_s']||1}" oninput="updateFMVal('${fm.id}')"><span class="fms-val" id="sv_s_${fm.id}">${G.fmVals[fm.id+'_s']||1}</span></div>
+        <div class="fms-row"><span class="fms-lbl">Wahrsch.</span><input type="range" class="fms-range" id="sl_p_${fm.id}" min="1" max="5" value="${G.fmVals[fm.id+'_p']||1}" oninput="updateFMVal('${fm.id}')"><span class="fms-val" id="sv_p_${fm.id}">${G.fmVals[fm.id+'_p']||1}</span></div>
+      </div>
+    </div>`).join('');
+}
+
+function updateFMVal(id){
+  const vs=document.getElementById('sl_s_'+id),vp=document.getElementById('sl_p_'+id);
+  if(!vs||!vp)return;
+  G.fmVals[id+'_s']=parseInt(vs.value);G.fmVals[id+'_p']=parseInt(vp.value);
+  document.getElementById('sv_s_'+id).textContent=vs.value;
+  document.getElementById('sv_p_'+id).textContent=vp.value;
+  drawFM();autoSave();
+}
+
+function drawFM(){
+  const cv=document.getElementById('fmCanvas');if(!cv)return;
+  const S=290,pad=32;cv.width=S;cv.height=S;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,S,S);
+  // quadrant backgrounds
+  const q=[[0,0,'rgba(34,197,94,.06)'],[1,0,'rgba(245,158,11,.08)'],[0,1,'rgba(245,158,11,.08)'],[1,1,'rgba(220,38,38,.1)']];
+  q.forEach(([xi,yi,col])=>{ctx.fillStyle=col;ctx.fillRect(pad+xi*(S-2*pad)/2,pad+yi*(S-2*pad)/2,(S-2*pad)/2,(S-2*pad)/2);});
+  // grid
+  ctx.strokeStyle='rgba(30,37,50,.07)';ctx.lineWidth=1;
+  for(let i=1;i<5;i++){const x=pad+i*(S-2*pad)/5;ctx.beginPath();ctx.moveTo(x,pad);ctx.lineTo(x,S-pad);ctx.stroke();}
+  for(let i=1;i<5;i++){const y=pad+i*(S-2*pad)/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(S-pad,y);ctx.stroke();}
+  // axes
+  ctx.strokeStyle='rgba(30,37,50,.18)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad,S/2);ctx.lineTo(S-pad,S/2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(S/2,pad);ctx.lineTo(S/2,S-pad);ctx.stroke();
+  // labels
+  ctx.font='8px JetBrains Mono,monospace';ctx.fillStyle='rgba(90,112,137,.7)';ctx.textAlign='center';
+  ctx.fillText('WAHRSCHEINLICHKEIT →',S/2,S-7);
+  ctx.save();ctx.translate(9,S/2);ctx.rotate(-Math.PI/2);ctx.fillText('SCHADENSPOTENZIAL →',0,0);ctx.restore();
+  // points
+  const lbl=['FM1','FM2','FM3','FM4','FM5','FM6','FM7','FM8'];
+  FAILURE_MODES.forEach((fm,idx)=>{
+    const p=G.fmVals[fm.id+'_p']||1,s=G.fmVals[fm.id+'_s']||1;
+    const x=pad+(p-1)/4*(S-2*pad);
+    const y=S-pad-(s-1)/4*(S-2*pad);
+    const risk=(p+s)/2;
+    const col=risk>=4?'#c0392b':risk>=3?'#b45309':'#166534';
+    const grd=ctx.createRadialGradient(x,y,1,x,y,11);
+    grd.addColorStop(0,col+'40');grd.addColorStop(1,col+'00');
+    ctx.beginPath();ctx.arc(x,y,11,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.font='bold 7px JetBrains Mono,monospace';ctx.fillStyle=col;ctx.textAlign='center';
+    ctx.fillText(lbl[idx],x,y-8);
+  });
+}
+
+// ════════════════════════════════
+// NIST TABS
+// ════════════════════════════════
+function setNIST(t){
+  ['g','m','ms','mg'].forEach(x=>{
+    const btn=document.getElementById('nt'+x),pnl=document.getElementById('np_'+x);
+    if(btn)btn.className='nist-tab'+(x===t?' a-'+x:'');
+    if(pnl)pnl.classList.toggle('on',x===t);
+  });
+}
+
+// ════════════════════════════════
+// ENTSCHEIDUNGEN
+// ════════════════════════════════
+function initCRDecisions(){
+  document.getElementById('crDecGrid').innerHTML=CR_DECISIONS.map(d=>`
+    <div class="cr-opt${G.crDecision===d.id?' sel':''}" data-id="${d.id}" onclick="pickDecision('${d.id}')">
+      <div class="cr-opt-ico">${d.ico}</div>
+      <div class="cr-opt-lbl">${d.lbl}</div>
+    </div>`).join('');
+}
+function pickDecision(id){
+  G.crDecision=id;
+  document.querySelectorAll('.cr-opt').forEach(el=>el.classList.toggle('sel',el.dataset.id===id));
+  autoSave();
+}
+
+// ════════════════════════════════
+// TIMER
+// ════════════════════════════════
+function startTimer(){
+  if(timerInterval)clearInterval(timerInterval);
+  timerSecs=300;renderTimer();
+  timerInterval=setInterval(()=>{timerSecs--;renderTimer();if(timerSecs<=0)clearInterval(timerInterval);},1000);
+}
+function resetTimer(){clearInterval(timerInterval);timerSecs=300;renderTimer();}
+function renderTimer(){
+  const el=document.getElementById('crTimer');if(!el)return;
+  const m=Math.floor(timerSecs/60),s=timerSecs%60;
+  el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.id='crTimer';
+  el.style.color=timerSecs<=0?'var(--lt)':timerSecs<=30?'var(--red)':'var(--amb)';
+}
+
+// ════════════════════════════════
+// PRÄSENTATION
+// ════════════════════════════════
+function openPresentation(){
+  const c=G.selectedCase?CASES.find(x=>x.id===G.selectedCase):null;
+  const g=id=>{const el=document.getElementById(id);return el?el.value:'—';};
+  const dec=G.crDecision?CR_DECISIONS.find(d=>d.id===G.crDecision):null;
+  const topFM=FAILURE_MODES.map(fm=>({...fm,score:(G.fmVals[fm.id+'_s']||1)+(G.fmVals[fm.id+'_p']||1)})).sort((a,b)=>b.score-a.score)[0];
+  document.getElementById('presContent').innerHTML=`
+    <div class="pres-badge">◈ 2-Minuten Krisenraum-Briefing</div>
+    <div class="pres-title">${c?`Dossier ${c.id}:<br><strong>${c.title}</strong>`:'Kein Dossier gewählt'}</div>
+    <div class="pres-section"><div class="pres-sh">01 · Was ist passiert?</div><div style="font-size:.87rem;color:rgba(200,220,240,.7);line-height:1.7">${c?c.situation:''}</div></div>
+    <div class="pres-section"><div class="pres-sh">02 · Systemanalyse & kritischstes Versagensmuster</div>
+      <div class="pres-grid">
+        <div class="pres-box"><div class="pres-box-hd" style="color:#93c5fd">Das System tut eigentlich</div><div class="pres-text">${g('fo_conclusion')}</div></div>
+        <div class="pres-box"><div class="pres-box-hd" style="color:#fca5a5">Kritischstes Versagensmuster</div><div class="pres-text">${topFM?topFM.name+' (Schaden '+(G.fmVals[topFM.id+'_s']||1)+'/Wahrsch. '+(G.fmVals[topFM.id+'_p']||1)+')':''}\n${g('fm_critical')}</div></div>
+      </div>
+    </div>
+    <div class="pres-section"><div class="pres-sh">03 · Steuerungsmodell</div>
+      <div class="pres-grid">
+        <div class="pres-box"><div class="pres-box-hd" style="color:#c4b5fd">Leitlinie</div><div class="pres-text">${g('cs_policy')}</div></div>
+        <div class="pres-box"><div class="pres-box-hd" style="color:#86efac">Kennzahlen</div><div class="pres-text">${g('cs_kpi1')}\n${g('cs_kpi2')}</div></div>
+        <div class="pres-box"><div class="pres-box-hd" style="color:#fca5a5">Rote Linien</div><div class="pres-text">${g('cs_redlines')}</div></div>
+        <div class="pres-box"><div class="pres-box-hd" style="color:#fcd34d">Eskalationsweg</div><div class="pres-text">${g('cs_esc')}</div></div>
+      </div>
+    </div>
+    <div class="pres-section"><div class="pres-sh">04 · Entscheidung</div>
+      <div class="pres-dec"><div style="font-family:var(--fm);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:#fcd34d;margin-bottom:5px;font-weight:600">Krisenraum-Entscheidung</div>
+        <div style="font-family:var(--fd);font-size:1.3rem;font-weight:700;color:#fcd34d">${dec?dec.ico+' '+dec.lbl:'—'}</div>
+        <div style="font-size:.84rem;color:rgba(200,220,240,.7);margin-top:8px;line-height:1.65">${g('cr_reasoning')}</div>
+      </div>
+    </div>
+    <div class="pres-section"><div class="pres-sh">05 · Nächste Schritte</div><div style="font-size:.85rem;color:rgba(200,220,240,.7);line-height:1.65">${g('cr_next')}</div></div>
+    <div style="text-align:center;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);font-family:var(--fm);font-size:.5rem;color:rgba(150,170,200,.3)">Designed by Prof. Thomas Petzold Ph.D. and Claude · KI-Governance Krisenraum · WuDE Session 5 · 2026</div>`;
+  document.getElementById('presMode').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closePresentation(){document.getElementById('presMode').style.display='none';document.body.style.overflow='';}
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+window.onload=function(){
+  initWQ();
+  renderCases();
+  initFMControls();
+  initCRDecisions();
+  setNIST('g');
+  loadSaved();
+};
+window.addEventListener('resize',()=>{if(currentTab===3)drawFM();});
+</script>
+</body>
+</html>
